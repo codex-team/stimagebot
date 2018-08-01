@@ -6,6 +6,18 @@ const Capella = require('@codexteam/capella-pics');
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.token, {polling: true});
 
+/**
+ * Process command /start
+ */
+bot.onText(/\/start/, msg => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, 'Send me a sticker and I\'ll return you a link to this image');
+});
+
+/**
+ * Process message with a sticker
+ */
 bot.on('sticker', (msg) => {
   const chatId = msg.chat.id,
         uploadsDir = './uploads';
