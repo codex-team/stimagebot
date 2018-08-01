@@ -1,0 +1,21 @@
+{
+  "name": "stimagebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@codexteam/capella-pics": "^1.0.1",
+    "node-telegram-bot-api": "^0.30.0",
+    "webp-converter": "^2.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
