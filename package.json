@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@codexteam/capella-pics": "^1.0.1",
     "node-telegram-bot-api": "^0.30.0",
