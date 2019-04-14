@@ -35,7 +35,7 @@ if (config.proxy.host && config.proxy.port) {
     agentClass: Agent,
     agentOptions: {
       socksHost: config.proxy.host,
-      socksPort: config.proxy.port,
+      socksPort: parseInt(config.proxy.port),
     }
   }
 }
