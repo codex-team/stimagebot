@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@codexteam/capella-pics@^1.0.1":
+"@codexteam/capella-pics@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@codexteam/capella-pics/-/capella-pics-1.0.2.tgz#890cb1de6f025198aa2f909e547ce0e7d92a48cf"
   integrity sha512-6OrRYoVJPp1vrsyDEfIg39hGXyDK94pfaF3pB97J2pWxxkDC4qObqfYZAZcqeoaHwXbtWrQGQGk5Vwc+w2QLzg==
@@ -2202,7 +2202,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-webp-converter@^2.1.6:
+webp-converter@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/webp-converter/-/webp-converter-2.2.2.tgz#fac9f1f8dd4983c88833b1db9b6eb03e23ecdd8e"
   integrity sha512-yvxNEgrW8MROIo0Uhl1HlMHcDBa/CuNdP0kT8KeTc3c9cEILod/yH0ig+eQuK7X0QGCylQjmJ1YcW4/4x4Bt5A==

@@ -9,10 +9,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@codexteam/capella-pics": "^1.0.1",
+    "@codexteam/capella-pics": "^1.0.2",
     "node-telegram-bot-api": "^0.30.0",
     "socks5-https-client": "^1.2.1",
-    "webp-converter": "^2.1.6"
+    "webp-converter": "^2.2.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
