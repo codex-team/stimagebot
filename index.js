@@ -18,9 +18,32 @@ if (!config.token) {
 }
 
 /**
+ * Bot connection settings
+ */
+let botParams = {
+  polling: true
+};
+
+/**
+ * Add socks5 proxy
+ * https://github.com/yagop/node-telegram-bot-api/issues/562#issuecomment-382313307
+ */
+if (config.proxy.host && config.proxy.port) {
+  const Agent = require('socks5-https-client/lib/Agent');
+
+  botParams.request = {
+    agentClass: Agent,
+    agentOptions: {
+      socksHost: config.proxy.host,
+      socksPort: config.proxy.port,
+    }
+  }
+}
+
+/**
  * Create a Bot's instance
  */
-const bot = new TelegramBot(config.token, {polling: true});
+const bot = new TelegramBot(config.token, botParams);
 
 /**
  * Process command /start

@@ -7,12 +7,11 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "dependencies": {
     "@codexteam/capella-pics": "^1.0.1",
     "node-telegram-bot-api": "^0.30.0",
+    "socks5-https-client": "^1.2.1",
     "webp-converter": "^2.1.6"
   },
   "devDependencies": {
