@@ -29,14 +29,11 @@ let botParams = {
  * https://github.com/yagop/node-telegram-bot-api/issues/562#issuecomment-382313307
  */
 if (config.proxy.host && config.proxy.port) {
-  const Agent = require('socks5-https-client/lib/Agent');
+  const Agent = require('socks-proxy-agent');
+  const agentConfig = `socks5://${config.proxy.host}:${config.proxy.port}`;
 
   botParams.request = {
-    agentClass: Agent,
-    agentOptions: {
-      socksHost: config.proxy.host,
-      socksPort: parseInt(config.proxy.port),
-    }
+    agent: new Agent(agentConfig),
   }
 }
 
@@ -62,7 +59,7 @@ bot.on('sticker', (msg) => {
    * Define chatId and directory for uploaded files
    */
   const chatId = msg.chat.id,
-        uploadsDir = './uploads';
+    uploadsDir = './uploads';
 
   /**
    * Download webp file by sticker's id
