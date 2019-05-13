@@ -26,7 +26,7 @@ let botParams = {
 
 /**
  * Add socks5 proxy
- * https://github.com/yagop/node-telegram-bot-api/issues/562#issuecomment-382313307
+ * https://github.com/telegraf/telegraf/issues/63#issuecomment-465130505
  */
 if (config.proxy.host && config.proxy.port) {
   const Agent = require('socks-proxy-agent');
