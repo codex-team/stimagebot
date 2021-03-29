@@ -1,6 +1,6 @@
 # @stimagebot
 
-Get a link to image for any Telegram sticker.
+Get a link to image for Telegram sticker.
 
 [![](assets/example.gif)](//t.me/stimagebot)
 
@@ -19,40 +19,40 @@ git clone https://github.com/codex-team/stimagebot
 cd stimagebot
 ```
 
-Install Node.js packages.
-
-```shell
-npm install
-```
-
-Create a config file.
+Create a config file and enter a token of your bot into this config.
 
 ```shell
 cp config.sample.js config.js
 ```
 
-Enter a token of your bot into this config.
+Then you can use docker or yarn to run the bot.
 
-Run a bot with `npm`, `node` or `forever`
+### Docker
+
+Run the container.
 
 ```shell
-npm run start
+docker-compose up
 ```
 
+It will install all node deps and run the code with auto reload on changes.
+
+### Yarn
+
+Install Node.js packages.
+
 ```shell
-node index.js
+yarn
 ```
 
+Then run the bot.
+
 ```shell
-forever index.js
+yarn start
 ```
 
-For development you can run bot with `nodemon` to enable auto restart app on changes.
+Or for dev need for auto restart app on changes.
 
 ```shell
-npm run start:dev
-```
-
-```shell
-nodemon index.js
+yarn start:dev
 ```
