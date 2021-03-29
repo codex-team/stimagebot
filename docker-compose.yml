@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    command: bash -c "yarn && yarn start:dev"
+    volumes:
+      - '.:/usr/src/app'
+    working_dir: /usr/src/app

@@ -7,8 +7,10 @@ const config = require('./config');
  * Require necessary packages
  */
 const webp = require('webp-converter');
-const Capella = require('@codexteam/capella-pics');
 const TelegramBot = require('node-telegram-bot-api');
+const path = require('path');
+const fs = require('fs');
+const uploadFile = require('./telegraph');
 
 /**
  * Throw error if bot toke is missing
@@ -23,19 +25,6 @@ if (!config.token) {
 let botParams = {
   polling: true
 };
-
-/**
- * Add socks5 proxy
- * https://github.com/telegraf/telegraf/issues/63#issuecomment-465130505
- */
-if (config.proxy.host && config.proxy.port) {
-  const Agent = require('socks-proxy-agent');
-  const agentConfig = `socks5://${config.proxy.host}:${config.proxy.port}`;
-
-  botParams.request = {
-    agent: new Agent(agentConfig),
-  }
-}
 
 /**
  * Create a Bot's instance
@@ -58,14 +47,23 @@ bot.on('sticker', (msg) => {
   /**
    * Define chatId and directory for uploaded files
    */
-  const chatId = msg.chat.id,
-    uploadsDir = './uploads';
+  const chatId = msg.chat.id;
+  const uploadsDir = path.join(__dirname, 'uploads');
+
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+
+  if (msg.sticker.is_animated) {
+    bot.sendMessage(chatId, 'Sorry, I cannot process animated stickers yet.');
+    return;
+  }
 
   /**
    * Download webp file by sticker's id
    */
   bot.downloadFile(msg.sticker.file_id, uploadsDir)
-    .then(pathToImage => {
+    .then(async (pathToImage) => {
       /**
        * Define path to png image
        * Add '.png' at the end of name of webp archive
@@ -80,19 +78,16 @@ bot.on('sticker', (msg) => {
       /**
        * Convert webp to png
        */
-      webp.dwebp(pathToImage, pathToImagePng, "-o", status => {
-        const capella = new Capella();
+      webp.dwebp(pathToImage, pathToImagePng, "-o")
+        .then((status, error) => {
+          return uploadFile(pathToImagePng);
+        })
+        .then(imageUrl => {
+          bot.sendMessage(chatId, imageUrl);
 
-        /**
-         * Upload image to Capella
-         */
-        capella.uploadFile(pathToImagePng, resp => {
-          /**
-           * Send link to image back to user
-           */
-          bot.sendMessage(chatId, resp.url);
+          try { fs.unlinkSync(pathToImage); } catch(e) {}
+          try { fs.unlinkSync(pathToImagePng); } catch(e) {}
         });
-      });
     })
     .catch(error => {
       /**
