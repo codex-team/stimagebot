@@ -35,7 +35,7 @@ Run the container.
 docker-compose up
 ```
 
-It will install all node deps and run the code with auto reload on changes.
+It will install all node deps and run the code.
 
 ### Yarn
 
