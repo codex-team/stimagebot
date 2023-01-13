@@ -12,7 +12,7 @@
     "axios": "^0.21.1",
     "form-data": "^4.0.0",
     "node-telegram-bot-api": "^0.30.0",
-    "qs": "^6.9.6",
+    "qs": "^6.10.3",
     "webp-converter": "^2.2.2"
   },
   "devDependencies": {
