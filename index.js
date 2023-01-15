@@ -11,7 +11,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 const fs = require('fs');
 
-const { uploadByBuffer, uploadByUrl } = require('telegraph-uploader');
+const { uploadByBuffer } = require('telegraph-uploader');
 
 
 const uploadsDir = path.join(__dirname, 'uploads');
