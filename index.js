@@ -10,13 +10,21 @@ const webp = require('webp-converter');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 const fs = require('fs');
-const uploadFile = require('./telegraph');
+
+const { uploadByBuffer, uploadByUrl } = require('telegraph-uploader');
+
+
+const uploadsDir = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.rmdirSync(uploadsDir, { recursive: true });
+}
 
 /**
  * Throw error if bot toke is missing
  */
 if (!config.token) {
-  throw new Error('Bot token is missing. Check config file.');
+  throw new Error('Bot token is missing. Check config file.'); 
 }
 
 /**
@@ -48,53 +56,61 @@ bot.on('sticker', (msg) => {
    * Define chatId and directory for uploaded files
    */
   const chatId = msg.chat.id;
-  const uploadsDir = path.join(__dirname, 'uploads');
 
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  try {
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    if (msg.sticker.is_animated) {
+      bot.sendMessage(chatId, 'Sorry, I cannot process animated stickers yet.');
+      return;
+    }
+
+    /**
+     * Download webp file by sticker's id
+     */
+    bot.downloadFile(msg.sticker.file_id, uploadsDir)
+      .then(async (pathToImage) => {
+        /**
+         * Define path to png image
+         * Add '.png' at the end of name of webp archive
+         */
+        const pathToImagePng = `${pathToImage}.png`;
+
+        /**
+         * Send chat action
+         */
+        bot.sendChatAction(chatId, 'upload_photo');
+
+        /**
+         * Convert webp to png
+         */
+        webp.dwebp(pathToImage, pathToImagePng, "-o")
+          .then((status, error) => {
+            return uploadByBuffer(fs.readFileSync(pathToImagePng), 'image/png');
+          })
+          .then(({ link, path }) => {
+            bot.sendMessage(chatId, link);
+
+            try { fs.unlinkSync(pathToImage); } catch(e) {}
+            try { fs.unlinkSync(pathToImagePng); } catch(e) {}
+          })
+          .catch(error => {
+            /**
+             * On error we just send a message to user
+             */
+            bot.sendMessage(chatId, 'Send me another sticker please');
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        bot.sendMessage(chatId, 'Something went wrong');
+        console.log(error);
+      });
+
+  } catch (error) {
+    bot.sendMessage(chatId, 'Something bad went wrong');
+    console.log(error);
   }
-
-  if (msg.sticker.is_animated) {
-    bot.sendMessage(chatId, 'Sorry, I cannot process animated stickers yet.');
-    return;
-  }
-
-  /**
-   * Download webp file by sticker's id
-   */
-  bot.downloadFile(msg.sticker.file_id, uploadsDir)
-    .then(async (pathToImage) => {
-      /**
-       * Define path to png image
-       * Add '.png' at the end of name of webp archive
-       */
-      const pathToImagePng = `${pathToImage}.png`;
-
-      /**
-       * Send chat action
-       */
-      bot.sendChatAction(chatId, 'upload_photo');
-
-      /**
-       * Convert webp to png
-       */
-      webp.dwebp(pathToImage, pathToImagePng, "-o")
-        .then((status, error) => {
-          return uploadFile(pathToImagePng);
-        })
-        .then(imageUrl => {
-          bot.sendMessage(chatId, imageUrl);
-
-          try { fs.unlinkSync(pathToImage); } catch(e) {}
-          try { fs.unlinkSync(pathToImagePng); } catch(e) {}
-        });
-    })
-    .catch(error => {
-      /**
-       * On error we just send a message to user
-       */
-      bot.sendMessage(chatId, 'Something went wrong');
-
-      console.log(error);
-    });
 });
