@@ -2,7 +2,7 @@
 
 Get a link to image for Telegram sticker.
 
-[![](assets/example.gif)](//t.me/stimagebot)
+[![](assets/demo.gif)](//t.me/stimagebot)
 
 Now you can easily add stickers to your comments on GitHub :wink:
 
