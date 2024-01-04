@@ -114,3 +114,54 @@ bot.on('sticker', (msg) => {
     console.log(error);
   }
 });
+
+/**
+ * Process message with a photo or photos
+ */
+bot.on('photo', (msg) => {
+  const chatId = msg.chat.id;
+
+  try {
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    // get the last image item from array
+    const photoItem = msg.photo[msg.photo.length - 1];
+    const photoFileId = photoItem.file_id;
+
+    /**
+     * Download image file by id
+     */
+    bot.downloadFile(photoFileId, uploadsDir)
+      .then(async (pathToImage) => {
+        /**
+         * Send chat action
+         */
+        bot.sendChatAction(chatId, 'upload_photo');
+
+        uploadByBuffer(fs.readFileSync(pathToImage), 'image/png')
+          .then(({ link, path }) => {
+            bot.sendMessage(chatId, link);
+
+            try { fs.unlinkSync(pathToImage); } catch(e) {}
+          })
+          .catch(error => {
+            /**
+             * On error we just send a message to user
+             */
+            bot.sendMessage(chatId, 'Send me another image please');
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        bot.sendMessage(chatId, 'Something went wrong');
+        console.log(error);
+      });
+
+  } catch (error) {
+    bot.sendMessage(chatId, 'Something bad went wrong');
+    console.log(error);
+  }
+})
+
