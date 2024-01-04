@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "node-telegram-bot-api": "^0.30.0",
     "telegraph-uploader": "^2.0.0",
     "webp-converter": "^2.2.2"
